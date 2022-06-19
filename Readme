@@ -1,5 +1,13 @@
 Text Message API DOCS
 
+||To run the application||
+   Navigate to the TextappApplication class under src/main/java/com/myfitnesspal/textapp/textapp/TextappApplication.java right click on TextappApplication and select run 'TextappApplication'
+   At this point spring will start the application, handle all setup related tasks, and the application will then be ready to receive messages via curl command line.
+
+|| To run the test suite||
+    Navigate to the TextappApplicationTests class under src/test/java/com/myfitnesspal/textapp/textapp/TextappApplicationTests.java right click on TextappApplicationTests and select run 'TextappApplicationTests'
+    At this point spring will run the whole test suite
+
 ||To POST a message using curl to localhost:8080/api/chats/ use the following command||
     curl -H "Content-Type: application/json" -X POST -d {\"username\":\"chris\",\"text\":\"abc\",\"timeout\":\"420\"} http://localhost:8080/api/chats/
 
@@ -28,6 +36,7 @@ Response body with a 200 status code
     "text": "Example of a text message payload here",
     "expiration_date": "2018-12-19T16:43:00.722498"
     }
+
 ||To GET a message for a given username use the following curl command||
     curl localhost:8080/api/chats/{usernameGoesHere}
 
@@ -50,4 +59,4 @@ Response body with a 200 status code
 
 ||To view the database go the following url in a WebBrowser||
     localhost:8080/h2-ui
-  please see the application.properties for username and password :)
+    please see the application.properties for username and password :)

@@ -1,6 +1,7 @@
 package com.myfitnesspal.textapp.textapp.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+
 import com.myfitnesspal.textapp.textapp.model.MessageViews;
 import com.myfitnesspal.textapp.textapp.model.Messages;
 import com.myfitnesspal.textapp.textapp.repo.MessageRepository;
@@ -27,13 +28,17 @@ public class MessageController {
     @JsonView(MessageViews.PostReturn.class)
     public ResponseEntity<Messages> sendNewMessage(@RequestBody Messages messages){
         Messages entity = messages;
-
         LocalDateTime now = LocalDateTime.now().plusSeconds(entity.getTimeout());
 //        LocalDateTime now = LocalDateTime.now().plusMinutes(entity.getTimeout());
 //        use the above commented out code during testing for visibility of timeout
         entity.setExpirationDate(now);
+        try{
+            return new ResponseEntity<Messages>(messageRepository.save(entity), HttpStatus.CREATED);
+        }catch (Exception e){
 
-        return new ResponseEntity<Messages>(messageRepository.save(entity), HttpStatus.CREATED);
+
+        }
+        return null;
     }
 
     @GetMapping("/chat/{id}")
