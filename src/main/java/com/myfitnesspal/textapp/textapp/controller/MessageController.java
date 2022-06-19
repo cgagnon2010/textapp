@@ -1,5 +1,7 @@
 package com.myfitnesspal.textapp.textapp.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.myfitnesspal.textapp.textapp.model.MessageViews;
 import com.myfitnesspal.textapp.textapp.model.Messages;
 import com.myfitnesspal.textapp.textapp.repo.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,12 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
 
 
-//TODO Figure out custom responses and write up documentation IE paths and acceptable arguments
-//TODO Figure out how to implement the timeout system
-//TODO figure out how to default the timeout value so it cant be passed as something else.
 //TODO write all test cases
 //TODO write error handlers as needed
 @RestController
@@ -23,25 +23,43 @@ public class MessageController {
     @Autowired
     private MessageRepository messageRepository;
 
-    //TODO write up the documentation on the API request and responses
     @PostMapping("/chats")
+    @JsonView(MessageViews.PostReturn.class)
     public ResponseEntity<Messages> sendNewMessage(@RequestBody Messages messages){
-        return new ResponseEntity<Messages>(messageRepository.save(messages), HttpStatus.CREATED);
+        Messages entity = messages;
+
+        LocalDateTime now = LocalDateTime.now().plusSeconds(entity.getTimeout());
+//        LocalDateTime now = LocalDateTime.now().plusMinutes(entity.getTimeout());
+//        use the above commented out code during testing for visibility of timeout
+        entity.setExpirationDate(now);
+
+        return new ResponseEntity<Messages>(messageRepository.save(entity), HttpStatus.CREATED);
     }
 
-    //TODO write up the documentation on the API request and responses
     @GetMapping("/chat/{id}")
+    @JsonView(MessageViews.GetById.class)
     public ResponseEntity<Messages> findMessagesById(@PathVariable(value = "id") long messageId){
         return new ResponseEntity<Messages>(messageRepository.findMessagesById(messageId), HttpStatus.OK);
     }
 
-    //TODO Try to re write this query to a similar format as the others
-    //TODO write up the documentation on the API request and responses
     @GetMapping("/chats/{username}")
-    public List<Messages> findByUsername(@PathVariable(value = "username") String username){
+    @JsonView(MessageViews.GetByUsername.class)
+    public ResponseEntity<List<Messages>> findByUsername(@PathVariable(value = "username") String username){
         List<Messages> messages = messageRepository.findByUsername(username);
-        return messages;
+
+        List<Messages> notExpiredMessages = new ArrayList<>();
+        for (Messages mess : messages) {
+            LocalDateTime now = LocalDateTime.now();
+            if(now.isBefore(mess.getExpirationDate())  && mess.isWasRead() == false){
+                notExpiredMessages.add(mess);
+            }
+        }
+        for (Messages putMessage : notExpiredMessages) {
+            putMessage.setWasRead(true);
+//            putMessage.setExpirationDate(LocalDateTime.now());
+//            is there a reason a message would go unread and we would need to flip it to read after its reached its expired datetime?
+            messageRepository.save(putMessage);
+        }
+        return new ResponseEntity<List<Messages>>(notExpiredMessages, HttpStatus.OK);
     }
-
-
 }

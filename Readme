@@ -1,0 +1,53 @@
+Text Message API DOCS
+
+||To POST a message using curl to localhost:8080/api/chats/ use the following command||
+    curl -H "Content-Type: application/json" -X POST -d {\"username\":\"chris\",\"text\":\"abc\",\"timeout\":\"420\"} http://localhost:8080/api/chats/
+
+JSON format is as follows for the request body
+    {
+        "username": "Example Name Here",
+        "text": "Example of a text message payload here",
+        "timeout": "10"
+    }
+
+Username - String format and is required
+Text - String format and is required
+timeout - Integer format and is optional
+
+Response body with a 201 Created response code
+    {
+        "id": 1
+    }
+
+||To GET a message for a given ID use the following curl command||
+     curl localhost:8080/api/chat/{IDGoesHere}
+
+Response body with a 200 status code
+    {
+    "username": "Example Name Here",
+    "text": "Example of a text message payload here",
+    "expiration_date": "2018-12-19T16:43:00.722498"
+    }
+||To GET a message for a given username use the following curl command||
+    curl localhost:8080/api/chats/{usernameGoesHere}
+
+Response body with a 200 status code
+
+    [
+     {
+        "id": 1,
+        "text": "Example of a text message payload here"
+     },
+     {
+        "id": 2,
+        "text": "Example of a text message payload here"
+     },
+     {
+        "id": 3,
+       "text": "Example of a text message payload here"
+     }
+    ]
+
+||To view the database go the following url in a WebBrowser||
+    localhost:8080/h2-ui
+  please see the application.properties for username and password :)

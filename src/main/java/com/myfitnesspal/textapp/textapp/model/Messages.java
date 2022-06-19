@@ -1,8 +1,10 @@
 package com.myfitnesspal.textapp.textapp.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -11,14 +13,24 @@ public class Messages {
 
     @Id
     @GeneratedValue()
-    private long id;
+    @JsonView({MessageViews.PostReturn.class, MessageViews.GetByUsername.class})
+    private Long id;
 
+    @JsonView(MessageViews.GetById.class)
     @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "text_message", nullable = false)
-    private String textMessage;
+    @JsonView({MessageViews.GetById.class, MessageViews.GetByUsername.class})
+    @Column(name = "text", nullable = false)
+    private String text;
 
-    @Column(name = "expiration", nullable = false)
-    private Integer messageExpiration ;
+    @Column(name = "timeout", columnDefinition = "long default 10")
+    private long timeout;
+
+    @JsonView(MessageViews.GetById.class)
+    @Column(name = "expiration_date")
+    private LocalDateTime expirationDate;
+
+    @Column(name = "was_read", columnDefinition = "boolean default false")
+    private boolean wasRead = false;
 }
