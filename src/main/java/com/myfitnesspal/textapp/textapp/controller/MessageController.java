@@ -26,12 +26,12 @@ public class MessageController {
     @PostMapping("/chats")
     @JsonView(MessageViews.PostReturn.class)
     public ResponseEntity<Messages> sendNewMessage(@RequestBody Messages messages) {
-        Messages entity = messages;
-        LocalDateTime now = LocalDateTime.now().plusSeconds(entity.getTimeout());
+        Messages request = messages;
+        LocalDateTime now = LocalDateTime.now().plusSeconds(request.getTimeout());
 //        LocalDateTime now = LocalDateTime.now().plusMinutes(entity.getTimeout());
 //        use the above commented out code during testing for visibility of timeout
-        entity.setExpirationDate(now);
-            return new ResponseEntity<Messages>(messageRepository.save(entity), HttpStatus.CREATED);
+        request.setExpirationDate(now);
+            return new ResponseEntity<Messages>(messageRepository.save(request), HttpStatus.CREATED);
     }
 
     @GetMapping("/chat/{id}")

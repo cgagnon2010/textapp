@@ -5,7 +5,7 @@ Text Message API DOCS
    At this point spring will start the application, handle all setup related tasks, and the application will then be ready to receive messages via curl command line.
 
 || To run the test suite||
-    Navigate to the TextappApplicationTests class under src/test/java/com/myfitnesspal/textapp/textapp/TextappApplicationTests.java right click on TextappApplicationTests and select run 'TextappApplicationTests'
+    Navigate to src/test/java/com/myfitnesspal/textapp/textapp right click on the package and select run 'Tests' in com.myFitnesspal.text.textapp
     At this point spring will run the whole test suite
 
 ||To POST a message using curl to localhost:8080/api/chats/ use the following command||
