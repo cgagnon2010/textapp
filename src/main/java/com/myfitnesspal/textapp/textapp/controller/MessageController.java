@@ -15,8 +15,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 
-//TODO write all test cases
-//TODO write error handlers as needed
+//TODO write error handlers if needed
 @RestController
 @RequestMapping("/api")
 public class MessageController {
@@ -26,19 +25,13 @@ public class MessageController {
 
     @PostMapping("/chats")
     @JsonView(MessageViews.PostReturn.class)
-    public ResponseEntity<Messages> sendNewMessage(@RequestBody Messages messages){
+    public ResponseEntity<Messages> sendNewMessage(@RequestBody Messages messages) {
         Messages entity = messages;
         LocalDateTime now = LocalDateTime.now().plusSeconds(entity.getTimeout());
 //        LocalDateTime now = LocalDateTime.now().plusMinutes(entity.getTimeout());
 //        use the above commented out code during testing for visibility of timeout
         entity.setExpirationDate(now);
-        try{
             return new ResponseEntity<Messages>(messageRepository.save(entity), HttpStatus.CREATED);
-        }catch (Exception e){
-
-
-        }
-        return null;
     }
 
     @GetMapping("/chat/{id}")
