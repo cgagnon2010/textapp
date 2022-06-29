@@ -1,0 +1,17 @@
+Follow Up Questions
+    Given your implementation, summarize how your solution could scale to millions of daily users and 1000
+    requests/second split evenly between reads and writes. Consider the following:
+    ● Data persistence / caching
+    ● Portability
+    ● Scalability
+    ● Testability
+    ● Framework implementation details
+
+Additionally, consider the following:
+    ● What questions might you have for product owners that could clarify or inform the need to scale your
+    service?
+    ● What technologies would you pick? Why?
+    ● What would you keep in your service? What might you change?
+    ● How would you monitor your service?
+    ● How would you secure and protect your service?
+    ● What improvements would you recommend for future development of this service?
